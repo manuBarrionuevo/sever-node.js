@@ -1,0 +1,14 @@
+{
+    "name": "mi-aplicacion-nodejs",
+    "version": "1.0.0",
+    "description": "Un simple servidor HTTP con Node.js",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {}
+  }
+  
