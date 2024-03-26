@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_CREDENTIALS_ID = 'dockerHub'
+        // Define el repositorio de imágenes
+        IMAGE_REPO = 'manuBarrionuevo/app-serverNode'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Extract Version') {
+            steps {
+                script {
+                    // Extrae la versión del package.json
+                    def version = sh(script: "jq -r '.version' package.json", returnStdout: true).trim()
+                    // Establece la versión en una variable de entorno
+                    env.APP_VERSION = version
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Construye la imagen con la versión extraída
+                    docker.build("${IMAGE_REPO}:${env.APP_VERSION}")
+                }
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                    script {
+                           // Instala las dependencias necesarias y ejecuta las pruebas
+                            sh 'npm install'
+                            sh 'npm test'
+                        }
+
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                        // Sube la imagen con la versión específica y latest
+                        docker.image("${IMAGE_REPO}:${env.APP_VERSION}").push()
+                        docker.image("${IMAGE_REPO}:${env.APP_VERSION}").push('latest')
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Aquí pondrías tus comandos para desplegar
+                sh 'echo "Desplegando aplicación..."'
+                // Asumiendo que tienes un script o un conjunto de comandos para desplegar
+                // Por ejemplo, con kubectl para Kubernetes:
+                // sh 'kubectl apply -f tu-manifiesto.yaml'
+            }
+        }
+    }
+}
