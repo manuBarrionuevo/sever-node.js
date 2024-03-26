@@ -31,10 +31,12 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                // Ejecuta tus pruebas aquí, puede ser un script o un comando
-                sh 'echo "Ejecutando pruebas automatizadas..."'
-                // Aquí puedes añadir tu comando de pruebas, por ejemplo:
-                // sh 'npm test'
+                    script {
+                           // Instala las dependencias necesarias y ejecuta las pruebas
+                            sh 'npm install'
+                            sh 'npm test'
+                        }
+
             }
         }
         stage('Push Docker Image') {
