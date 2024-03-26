@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerHub'
-        IMAGE_REPO = 'manuBarrionuevo/app-serverNode'
+        IMAGE_REPO = 'mbarrionuevok8s/app-serverNode'
     }
     stages {
         stage('Checkout') {
