@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS_ID = 'dockerHub'
+        DOCKER_CREDENTIALS_ID = 'docker-node'
         IMAGE_REPO = 'mbarrionuevok8s/app-server-node'
     }
     stages {
