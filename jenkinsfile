@@ -32,24 +32,20 @@ pipeline {
             }
         }
         stage('Run Tests') {
-            steps {
-                script {
-                    // Iniciar el contenedor Docker y obtener su ID
-                    def testContainer = docker.run(
-                        image: 'node:14',
-                        workingDir: '/usr/src/app',
-                        command: 'cat' // Ejecuta un comando que mantiene el contenedor vivo
-                    )
-                    // Copiar el directorio 'app' al contenedor
-                    sh "docker cp ${WORKSPACE}/app ${testContainer.id}:/usr/src/app"
-                    // Ejecutar los comandos de prueba dentro del contenedor
-                    sh "docker exec ${testContainer.id} sh -c 'npm install'"
-                    sh "docker exec ${testContainer.id} sh -c 'npm test'"
-                    // Detener y eliminar el contenedor después de la ejecución de la prueba
-                    testContainer.stop()
+                agent {
+                    docker {
+                        image 'node:14' // La imagen de Docker que quieres usar
+                        args '-v ${WORKSPACE}/app:/usr/src/app' // Monta la carpeta app en el contenedor
+                    }
                 }
-            }
+                steps {
+                    script {
+                        sh 'npm install'
+                        sh 'npm test'
+                    }
+                }
         }
+
 
 
 
