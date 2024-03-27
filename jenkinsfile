@@ -32,17 +32,13 @@ pipeline {
             }
         }
         stage('Run Tests') {
-            agent {
-                docker {
-                    image 'node:14'
-                    args '-w /usr/src/app'
-                }
-            }
             steps {
                 script {
-                    // Cambia el directorio no es necesario aquí ya que el directorio de trabajo es manejado por el agente de Docker
-                    sh 'npm install'
-                    sh 'npm test'
+                    // Cambia el directorio a 'app' antes de ejecutar las pruebas
+                    dir('app') {
+                        sh 'npm install'
+                        sh 'npm test'
+                    }
                 }
             }
         }
