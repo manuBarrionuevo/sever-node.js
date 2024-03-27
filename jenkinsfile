@@ -31,21 +31,21 @@ pipeline {
                 }
             }
         }
-       stage('Run Tests') {
-            agent {
-                docker {
-                    image 'node:14'
-                    args '-w /usr/src/app -v ${WORKSPACE}/app:/usr/src/app'
+        stage('Run Tests') {
+                agent {
+                    docker {
+                        image 'node:14'
+                        args '-w /usr/src/app -v ${WORKSPACE}/app:/usr/src/app'
+                    }
+                }
+                steps {
+                    script {
+                        sh 'npm install'
+                        sh 'npm test'
+                    }
                 }
             }
-            steps {
-                script {
-                    sh 'ls -la' // Lista los archivos en el directorio actual para verificar
-                    sh 'npm install'
-                    sh 'npm test'
-                }
-            }
-        }
+
 
         stage('Push Docker Image') {
             steps {
