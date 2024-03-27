@@ -40,6 +40,7 @@ pipeline {
             }
             steps {
                 script {
+                    sh 'ls -la' // Lista los archivos en el directorio actual para verificar
                     sh 'npm install'
                     sh 'npm test'
                 }
