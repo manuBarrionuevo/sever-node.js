@@ -31,17 +31,13 @@ pipeline {
                 }
             }
         }
-<<<<<<< HEAD
       stage('Run Tests') {
-=======
-       stage('Run Tests') {
             agent {
                 docker {
                     image 'node:14' // Usa la imagen de Docker de Node.js
                     args '-w /usr/src/app' // Establece el directorio de trabajo
                 }
             }
->>>>>>> develop
             steps {
                 script {
                     sh 'npm install' // Instala las dependencias del proyecto
